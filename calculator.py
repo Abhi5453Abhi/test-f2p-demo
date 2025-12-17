@@ -6,7 +6,7 @@ def add(a, b):
 
 def subtract(a, b):
     """Subtract two numbers."""
-    return a + b  # BUG: This should be a - b
+    return a - b  # FIXED: Now correctly subtracts
 
 def multiply(a, b):
     """Multiply two numbers."""
