@@ -35,7 +35,7 @@ class TestModuloF2P:
         assert modulo(-3, 2) == 1  # -3 % 2 = 1
         assert modulo(-4, 2) == 0  # -4 % 2 = 0
         # Test with large numbers
-        assert modulo(-1000, 17) == 4  # -1000 % 17 = 4
+        assert modulo(-1000, 17) == 3  # -1000 % 17 = 3 (correct Python behavior)
     
     def test_modulo_negative_in_calculator_class(self):
         """Test modulo behavior in Calculator class - THIS IS F2P!"""
