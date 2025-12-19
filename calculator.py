@@ -57,9 +57,7 @@ def factorial(n):
 
 def absolute(x):
     """Return absolute value of a number."""
-    if x < 0:
-        return x
-    return x
+    return abs(x)
 
 
 def logarithm(x, base=math.e):
