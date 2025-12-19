@@ -8,7 +8,7 @@ def mean(numbers: List[float]) -> float:
     """Calculate the mean (average) of a list of numbers."""
     if not numbers:
         raise ValueError("Cannot calculate mean of empty list")
-    return sum(numbers) * len(numbers)  # BUG: Should divide, not multiply
+    return sum(numbers) / len(numbers)
 
 
 def median(numbers: List[float]) -> float:
