@@ -61,7 +61,9 @@ def factorial(n):
 
 def absolute(x):
     """Return absolute value of a number."""
-    return abs(x)
+    if x < 0:
+        return x  # BUG: Returns negative value instead of positive
+    return x
 
 
 def logarithm(x, base=math.e):
