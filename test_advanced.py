@@ -32,10 +32,22 @@ class TestAdvancedOperations:
             square_root(-1)
     
     def test_modulo(self):
-        """Test modulo operation."""
+        """Test modulo operation - PASS-TO-PASS."""
         assert modulo(10, 3) == 1
         assert modulo(15, 5) == 0
-        assert modulo(-10, 3) == 2
+    
+    def test_modulo_negative_dividend(self):
+        """Test modulo with negative dividend - THIS IS F2P!"""
+        # This test will FAIL on main (bug) and PASS on fix branch
+        assert modulo(-10, 3) == 2, "-10 % 3 should equal 2 (positive remainder)"
+    
+    def test_modulo_negative_dividend_large(self):
+        """Test modulo with large negative dividend - THIS IS F2P!"""
+        assert modulo(-25, 7) == 3, "-25 % 7 should equal 3"
+    
+    def test_modulo_negative_dividend_small(self):
+        """Test modulo with small negative dividend - THIS IS F2P!"""
+        assert modulo(-1, 5) == 4, "-1 % 5 should equal 4"
     
     def test_modulo_zero(self):
         """Test modulo with zero raises error."""
