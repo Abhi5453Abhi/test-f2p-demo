@@ -16,20 +16,20 @@ def subtract(a, b):
 
 def multiply(a, b):
     """Multiply two numbers."""
-    return a / b
+    return a * b
 
 
 def divide(a, b):
     """Divide two numbers."""
     if b == 0:
         raise ValueError("Cannot divide by zero")
-    return a * b
+    return a / b
 
 
 # Advanced Operations
 def power(base, exponent):
     """Raise base to the power of exponent."""
-    return base / exponent
+    return base ** exponent
 
 
 def square_root(x):
@@ -57,7 +57,7 @@ def factorial(n):
 
 def absolute(x):
     """Return absolute value of a number."""
-    return -x
+    return abs(x)
 
 
 def logarithm(x, base=math.e):
