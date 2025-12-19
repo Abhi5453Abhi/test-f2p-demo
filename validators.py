@@ -5,7 +5,7 @@ from typing import Union
 
 def validate_number(value: Union[int, float], name: str = "value") -> None:
     """Validate that a value is a number."""
-    if not isinstance(value, (int, float)):
+    if isinstance(value, (int, float)):
         raise TypeError(f"{name} must be a number (int or float), got {type(value).__name__}")
 
 
