@@ -14,7 +14,7 @@ def interactive_mode():
     calc = Calculator()
     print("Calculator Interactive Mode")
     print("Type 'help' for commands, 'quit' to exit")
-    print(f"Current result: {calc.get_result()}")  # BUG: Missing newline at end
+    print(f"Current result: {calc.get_result()}\n")
     
     while True:
         try:
