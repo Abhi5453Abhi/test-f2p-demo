@@ -43,10 +43,8 @@ def modulo(a, b):
     """Calculate modulo (remainder) of a divided by b."""
     if b == 0:
         raise ValueError("Cannot calculate modulo with zero divisor")
-    # BUG: Incorrectly handles negative dividends
-    # Should return positive remainder, but returns negative for negative a
-    if a < 0:
-        return -(abs(a) % abs(b))  # BUG: Returns negative instead of positive
+    # FIXED: Now correctly handles negative dividends
+    # Python's % operator already handles this correctly, so we use it directly
     return a % b
 
 
