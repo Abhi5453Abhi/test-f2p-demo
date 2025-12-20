@@ -7,6 +7,10 @@ from calculator import (
     modulo, factorial, absolute, logarithm, Calculator
 )
 from math_utils import mean, median, mode, standard_deviation, gcd, lcm
+from converter import (
+    convert_temperature, convert_length, convert_weight, convert_volume,
+    get_available_units
+)
 
 
 def interactive_mode():
@@ -56,6 +60,44 @@ def interactive_mode():
                 value = float(command.split()[1])
                 result = calc.power(value)
                 print(f"Result: {result}")
+            elif command.startswith('convert '):
+                parts = command.split()
+                if len(parts) < 5:
+                    print("Usage: convert <category> <value> <from_unit> <to_unit>")
+                    print("Categories: temperature, length, weight, volume")
+                    print("Type 'units <category>' to see available units")
+                else:
+                    category = parts[1]
+                    value = float(parts[2])
+                    from_unit = parts[3]
+                    to_unit = parts[4]
+                    try:
+                        if category == 'temperature':
+                            result = convert_temperature(value, from_unit, to_unit)
+                        elif category == 'length':
+                            result = convert_length(value, from_unit, to_unit)
+                        elif category == 'weight':
+                            result = convert_weight(value, from_unit, to_unit)
+                        elif category == 'volume':
+                            result = convert_volume(value, from_unit, to_unit)
+                        else:
+                            print(f"Unknown category: {category}")
+                            continue
+                        print(f"{value} {from_unit} = {result} {to_unit}")
+                    except ValueError as e:
+                        print(f"Error: {e}")
+            elif command.startswith('units '):
+                parts = command.split()
+                if len(parts) < 2:
+                    print("Usage: units <category>")
+                    print("Categories: temperature, length, weight, volume")
+                else:
+                    category = parts[1]
+                    try:
+                        units = get_available_units(category)
+                        print(f"Available {category} units: {', '.join(units)}")
+                    except ValueError as e:
+                        print(f"Error: {e}")
             else:
                 print("Unknown command. Type 'help' for available commands.")
         except (ValueError, IndexError, ZeroDivisionError) as e:
@@ -79,8 +121,12 @@ Available commands:
   pow <number>    - Raise result to power of number
   reset           - Reset calculator to 0
   history         - Show operation history
+  convert <category> <value> <from_unit> <to_unit> - Convert units
+  units <category> - Show available units for a category
   help            - Show this help message
   quit/exit       - Exit calculator
+  
+Conversion categories: temperature, length, weight, volume
     """)
 
 
@@ -94,11 +140,41 @@ def main():
                        help='Operation to perform')
     parser.add_argument('--operands', '-n', nargs='+', type=float,
                        help='Operands for the operation')
+    parser.add_argument('--convert', '-c', nargs=4, metavar=('CATEGORY', 'VALUE', 'FROM', 'TO'),
+                       help='Convert units: --convert <category> <value> <from_unit> <to_unit>')
+    parser.add_argument('--units', '-u', choices=['temperature', 'length', 'weight', 'volume'],
+                       help='List available units for a category')
     
     args = parser.parse_args()
     
     if args.interactive:
         interactive_mode()
+    elif args.convert:
+        try:
+            category, value_str, from_unit, to_unit = args.convert
+            value = float(value_str)
+            if category == 'temperature':
+                result = convert_temperature(value, from_unit, to_unit)
+            elif category == 'length':
+                result = convert_length(value, from_unit, to_unit)
+            elif category == 'weight':
+                result = convert_weight(value, from_unit, to_unit)
+            elif category == 'volume':
+                result = convert_volume(value, from_unit, to_unit)
+            else:
+                print(f"Error: Unknown category: {category}", file=sys.stderr)
+                sys.exit(1)
+            print(f"{value} {from_unit} = {result} {to_unit}")
+        except ValueError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            sys.exit(1)
+    elif args.units:
+        try:
+            units = get_available_units(args.units)
+            print(f"Available {args.units} units: {', '.join(units)}")
+        except ValueError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            sys.exit(1)
     elif args.operation and args.operands:
         try:
             if args.operation == 'add':
