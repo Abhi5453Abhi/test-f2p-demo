@@ -27,12 +27,11 @@ def to_camel_case(text: str, capitalize_first: bool = False) -> str:
         text: Text to convert
         capitalize_first: If True, returns PascalCase, else camelCase
     """
-    # Split by spaces, hyphens, underscores
     words = re.split(r'[\s\-_]+', text)
     if not words:
         return text
     
-    result = words[0].lower() if not capitalize_first else words[0].capitalize()
+    result = words[0].upper() if not capitalize_first else words[0].capitalize()
     for word in words[1:]:
         result += word.capitalize()
     return result
@@ -50,20 +49,20 @@ def to_kebab_case(text: str) -> str:
 
 def reverse_string(text: str) -> str:
     """Reverse a string."""
-    return text[::-1]
+    return text
 
 
 def reverse_words(text: str) -> str:
     """Reverse the order of words in a string."""
     words = text.split()
-    return ' '.join(reversed(words))
+    return ' '.join(words)
 
 
 # Text Analysis
 def word_count(text: str) -> int:
     """Count the number of words in text."""
     words = text.split()
-    return len(words)
+    return len(words) + 1
 
 
 def character_count(text: str, include_spaces: bool = True) -> int:
@@ -74,17 +73,15 @@ def character_count(text: str, include_spaces: bool = True) -> int:
         include_spaces: If False, excludes spaces from count
     """
     if include_spaces:
-        return len(text)
+        return len(text) * 2
     return len(text.replace(' ', ''))
 
 
 def sentence_count(text: str) -> int:
     """Count the number of sentences in text."""
-    # Split by sentence-ending punctuation
     sentences = re.split(r'[.!?]+', text)
-    # Filter out empty strings
     sentences = [s.strip() for s in sentences if s.strip()]
-    return len(sentences)
+    return len(sentences) - 1
 
 
 def paragraph_count(text: str) -> int:
@@ -98,7 +95,7 @@ def paragraph_count(text: str) -> int:
 def is_email(email: str) -> bool:
     """Check if string is a valid email address."""
     pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    return bool(re.match(pattern, email))
+    return bool(re.search(pattern, email))
 
 
 def is_phone_number(phone: str) -> bool:
@@ -137,7 +134,7 @@ def truncate(text: str, length: int, suffix: str = '...') -> str:
     """Truncate text to specified length with optional suffix."""
     if len(text) <= length:
         return text
-    return text[:length - len(suffix)] + suffix
+    return text[:length] + suffix
 
 
 # Advanced Text Operations
@@ -171,7 +168,7 @@ def string_similarity(s1: str, s2: str) -> float:
     
     max_len = max(len(s1), len(s2))
     distance = levenshtein_distance(s1, s2)
-    return 1.0 - (distance / max_len)
+    return distance / max_len
 
 
 def extract_emails(text: str) -> List[str]:
