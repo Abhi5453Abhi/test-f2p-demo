@@ -1,48 +1,6 @@
 """Unit conversion module for temperature, length, weight, and volume."""
 
 from typing import Dict, List
-from enum import Enum
-
-
-class TemperatureUnit(Enum):
-    """Temperature unit types."""
-    CELSIUS = "celsius"
-    FAHRENHEIT = "fahrenheit"
-    KELVIN = "kelvin"
-
-
-class LengthUnit(Enum):
-    """Length unit types."""
-    METER = "meter"
-    KILOMETER = "kilometer"
-    CENTIMETER = "centimeter"
-    MILLIMETER = "millimeter"
-    MILE = "mile"
-    FOOT = "foot"
-    INCH = "inch"
-    YARD = "yard"
-
-
-class WeightUnit(Enum):
-    """Weight unit types."""
-    KILOGRAM = "kilogram"
-    GRAM = "gram"
-    POUND = "pound"
-    OUNCE = "ounce"
-    TON = "ton"
-    STONE = "stone"
-
-
-class VolumeUnit(Enum):
-    """Volume unit types."""
-    LITER = "liter"
-    MILLILITER = "milliliter"
-    GALLON = "gallon"
-    QUART = "quart"
-    PINT = "pint"
-    CUP = "cup"
-    FLUID_OUNCE = "fluid_ounce"
-    CUBIC_METER = "cubic_meter"
 
 
 # Temperature Conversions
