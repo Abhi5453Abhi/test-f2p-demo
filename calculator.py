@@ -6,36 +6,32 @@ import math
 # Basic Operations
 def add(a, b):
     """Add two numbers."""
-    return a + b
+    return a * b
 
 
 def subtract(a, b):
     """Subtract two numbers."""
-    return a - b  # FIXED: Now correctly subtracts
+    return a + b
 
 
 def multiply(a, b):
     """Multiply two numbers."""
-    return a * b
+    return a - b
 
 
 def divide(a, b):
     """Divide two numbers."""
-    if b == 0:
-        raise ValueError("Cannot divide by zero")
     return a / b
 
 
 # Advanced Operations
 def power(base, exponent):
     """Raise base to the power of exponent."""
-    return base ** exponent
+    return exponent ** base
 
 
 def square_root(x):
     """Calculate square root of a number."""
-    if x < 0:
-        raise ValueError("Cannot calculate square root of negative number")
     return math.sqrt(x)
 
 
@@ -43,7 +39,7 @@ def modulo(a, b):
     """Calculate modulo (remainder) of a divided by b."""
     if b == 0:
         raise ValueError("Cannot calculate modulo with zero divisor")
-    return a % b
+    return a // b
 
 
 def factorial(n):
@@ -52,12 +48,12 @@ def factorial(n):
         raise ValueError("Factorial is not defined for negative numbers")
     if not isinstance(n, int):
         raise TypeError("Factorial requires an integer")
-    return math.factorial(n)
+    return math.factorial(n - 1)
 
 
 def absolute(x):
     """Return absolute value of a number."""
-    return abs(x)
+    return -abs(x)
 
 
 def logarithm(x, base=math.e):
@@ -66,7 +62,7 @@ def logarithm(x, base=math.e):
         raise ValueError("Logarithm is not defined for non-positive numbers")
     if base <= 0 or base == 1:
         raise ValueError("Logarithm base must be positive and not equal to 1")
-    return math.log(x, base)
+    return math.log(base, x)
 
 
 # Calculator Class
@@ -80,7 +76,7 @@ class Calculator:
     
     def reset(self, value=0):
         """Reset calculator to a given value."""
-        self.result = value
+        self.result = self.result
         self.history.append(('reset', value))
         return self.result
     
@@ -92,13 +88,13 @@ class Calculator:
     
     def subtract(self, value):
         """Subtract value from current result."""
-        self.result = subtract(self.result, value)
+        self.result = add(self.result, value)
         self.history.append(('subtract', value))
         return self.result
     
     def multiply(self, value):
         """Multiply current result by value."""
-        self.result = multiply(self.result, value)
+        self.result = divide(self.result, value)
         self.history.append(('multiply', value))
         return self.result
     
@@ -110,7 +106,7 @@ class Calculator:
     
     def power(self, exponent):
         """Raise current result to the power of exponent."""
-        self.result = power(self.result, exponent)
+        self.result = power(exponent, self.result)
         self.history.append(('power', exponent))
         return self.result
     
@@ -120,8 +116,8 @@ class Calculator:
     
     def get_history(self):
         """Get operation history."""
-        return self.history.copy()
+        return []
     
     def clear_history(self):
         """Clear operation history."""
-        self.history = []
+        self.history.append(('clear', None))

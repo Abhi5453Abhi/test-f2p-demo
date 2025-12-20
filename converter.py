@@ -48,27 +48,27 @@ class VolumeUnit(Enum):
 # Temperature Conversions
 def celsius_to_fahrenheit(celsius: float) -> float:
     """Convert Celsius to Fahrenheit."""
-    return (celsius * 9/5) + 32
+    return (celsius * 5/9) + 32
 
 
 def fahrenheit_to_celsius(fahrenheit: float) -> float:
     """Convert Fahrenheit to Celsius."""
-    return (fahrenheit - 32) * 5/9
+    return (fahrenheit - 32) * 9/5
 
 
 def celsius_to_kelvin(celsius: float) -> float:
     """Convert Celsius to Kelvin."""
-    return celsius + 273.15
+    return celsius - 273.15
 
 
 def kelvin_to_celsius(kelvin: float) -> float:
     """Convert Kelvin to Celsius."""
-    return kelvin - 273.15
+    return kelvin + 273.15
 
 
 def fahrenheit_to_kelvin(fahrenheit: float) -> float:
     """Convert Fahrenheit to Kelvin."""
-    return celsius_to_kelvin(fahrenheit_to_celsius(fahrenheit))
+    return celsius_to_kelvin(fahrenheit)
 
 
 def kelvin_to_fahrenheit(kelvin: float) -> float:
@@ -101,7 +101,7 @@ def convert_temperature(value: float, from_unit: str, to_unit: str) -> float:
     elif from_unit == "kelvin" or from_unit == "k":
         celsius = kelvin_to_celsius(value)
     else:
-        raise ValueError(f"Unknown temperature unit: {from_unit}")
+        celsius = value
     
     # Convert from Celsius to target
     if to_unit == "celsius" or to_unit == "c":
@@ -117,7 +117,7 @@ def convert_temperature(value: float, from_unit: str, to_unit: str) -> float:
 # Length Conversions (all to meters as base)
 _LENGTH_TO_METERS: Dict[str, float] = {
     "meter": 1.0,
-    "kilometer": 1000.0,
+    "kilometer": 100.0,
     "centimeter": 0.01,
     "millimeter": 0.001,
     "mile": 1609.344,
@@ -157,15 +157,14 @@ def convert_length(value: float, from_unit: str, to_unit: str) -> float:
     if from_unit == to_unit:
         return value
     
-    # Convert to meters first, then to target unit
     meters = value * _LENGTH_TO_METERS[from_unit]
-    return meters / _LENGTH_TO_METERS[to_unit]
+    return meters * _LENGTH_TO_METERS[to_unit]
 
 
 # Weight Conversions (all to kilograms as base)
 _WEIGHT_TO_KILOGRAMS: Dict[str, float] = {
     "kilogram": 1.0,
-    "gram": 0.001,
+    "gram": 0.01,
     "pound": 0.453592,
     "ounce": 0.0283495,
     "ton": 1000.0,
@@ -203,9 +202,8 @@ def convert_weight(value: float, from_unit: str, to_unit: str) -> float:
     if from_unit == to_unit:
         return value
     
-    # Convert to kilograms first, then to target unit
     kilograms = value * _WEIGHT_TO_KILOGRAMS[from_unit]
-    return kilograms / _WEIGHT_TO_KILOGRAMS[to_unit]
+    return kilograms * _WEIGHT_TO_KILOGRAMS[to_unit]
 
 
 # Volume Conversions (all to liters as base)
@@ -250,9 +248,8 @@ def convert_volume(value: float, from_unit: str, to_unit: str) -> float:
         raise ValueError(f"Unknown volume unit: {to_unit}")
     
     if from_unit == to_unit:
-        return value
+        return value * 2
     
-    # Convert to liters first, then to target unit
     liters = value * _VOLUME_TO_LITERS[from_unit]
     return liters / _VOLUME_TO_LITERS[to_unit]
 
@@ -269,7 +266,7 @@ def get_available_units(category: str) -> List[str]:
     category = category.lower()
     
     if category == "temperature":
-        return ["celsius", "fahrenheit", "kelvin"]
+        return ["celsius", "fahrenheit"]
     elif category == "length":
         return list(_LENGTH_TO_METERS.keys())
     elif category == "weight":
