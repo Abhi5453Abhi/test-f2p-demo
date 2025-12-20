@@ -11,6 +11,13 @@ from converter import (
     convert_temperature, convert_length, convert_weight, convert_volume,
     get_available_units
 )
+from string_utils import (
+    capitalize_words, to_snake_case, to_camel_case, to_kebab_case,
+    reverse_string, reverse_words, word_count, character_count,
+    is_email, is_phone_number, is_url, extract_emails, extract_urls,
+    remove_whitespace, normalize_whitespace, truncate, get_statistics,
+    string_similarity, levenshtein_distance
+)
 
 
 def interactive_mode():
@@ -144,6 +151,15 @@ def main():
                        help='Convert units: --convert <category> <value> <from_unit> <to_unit>')
     parser.add_argument('--units', '-u', choices=['temperature', 'length', 'weight', 'volume'],
                        help='List available units for a category')
+    parser.add_argument('--string', '-s', choices=[
+        'capitalize', 'snake', 'camel', 'kebab', 'reverse', 'reverse-words',
+        'word-count', 'char-count', 'validate-email', 'validate-phone', 'validate-url',
+        'extract-emails', 'extract-urls', 'remove-spaces', 'normalize', 'truncate',
+        'stats', 'similarity'
+    ], help='String operation to perform')
+    parser.add_argument('--text', '-t', type=str, help='Text to process')
+    parser.add_argument('--text2', type=str, help='Second text (for similarity comparison)')
+    parser.add_argument('--length', '-l', type=int, help='Length parameter (for truncate)')
     
     args = parser.parse_args()
     
@@ -173,6 +189,67 @@ def main():
             units = get_available_units(args.units)
             print(f"Available {args.units} units: {', '.join(units)}")
         except ValueError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            sys.exit(1)
+    elif args.string:
+        if not args.text:
+            print("Error: --text is required for string operations", file=sys.stderr)
+            sys.exit(1)
+        
+        try:
+            text = args.text
+            if args.string == 'capitalize':
+                result = capitalize_words(text)
+            elif args.string == 'snake':
+                result = to_snake_case(text)
+            elif args.string == 'camel':
+                result = to_camel_case(text, capitalize_first=False)
+            elif args.string == 'kebab':
+                result = to_kebab_case(text)
+            elif args.string == 'reverse':
+                result = reverse_string(text)
+            elif args.string == 'reverse-words':
+                result = reverse_words(text)
+            elif args.string == 'word-count':
+                result = word_count(text)
+            elif args.string == 'char-count':
+                result = character_count(text, include_spaces=True)
+            elif args.string == 'validate-email':
+                result = is_email(text)
+            elif args.string == 'validate-phone':
+                result = is_phone_number(text)
+            elif args.string == 'validate-url':
+                result = is_url(text)
+            elif args.string == 'extract-emails':
+                emails = extract_emails(text)
+                result = ', '.join(emails) if emails else 'No emails found'
+            elif args.string == 'extract-urls':
+                urls = extract_urls(text)
+                result = ', '.join(urls) if urls else 'No URLs found'
+            elif args.string == 'remove-spaces':
+                result = remove_whitespace(text)
+            elif args.string == 'normalize':
+                result = normalize_whitespace(text)
+            elif args.string == 'truncate':
+                if not args.length:
+                    print("Error: --length is required for truncate", file=sys.stderr)
+                    sys.exit(1)
+                result = truncate(text, args.length)
+            elif args.string == 'stats':
+                stats = get_statistics(text)
+                result = '\n'.join(f"{k}: {v}" for k, v in stats.items())
+            elif args.string == 'similarity':
+                if not args.text2:
+                    print("Error: --text2 is required for similarity comparison", file=sys.stderr)
+                    sys.exit(1)
+                similarity = string_similarity(text, args.text2)
+                distance = levenshtein_distance(text, args.text2)
+                result = f"Similarity: {similarity:.2%}, Distance: {distance}"
+            else:
+                print(f"Error: Unknown string operation: {args.string}", file=sys.stderr)
+                sys.exit(1)
+            print(result)
+        except Exception as e:
             print(f"Error: {e}", file=sys.stderr)
             sys.exit(1)
     elif args.operation and args.operands:
